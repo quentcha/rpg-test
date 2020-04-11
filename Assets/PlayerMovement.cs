@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 3f;
-    public string border = "unknown";
+    public string collision;
+    float position_x;
+    float position_y;
     public Rigidbody2D rb;
     public Animator animator;
-
     Vector2 movement;
 
     // Update is called once per frame
@@ -26,23 +27,30 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        position_x = GetComponent<Rigidbody2D>().position.x;
+        position_y = GetComponent<Rigidbody2D>().position.y;
         // movement because reapeated more times
         rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
-        if (GetComponent<Rigidbody2D>().position.x > 4.8)
+        if (position_x > 4.8)
         {
-            border = "x right";
+            transform.position = new Vector3(4.8f, position_y, 1f);
         }
-        else if (GetComponent<Rigidbody2D>().position.x < -3.9)
+        else if (position_x < -3.9)
         {
-            border = "x left";
+            transform.position = new Vector3(-3.9f, position_y, 1f);
         }
-        /*
-        else
+        else if (position_y > 3.68)
         {
-            rb.MovePosition(rb.position + movement * moveSpeed * Time.fixedDeltaTime);
+            transform.position = new Vector3(position_x, 3.67f, 1f);
         }
-        */
-        
+        else if (position_y < -2.26)
+        {
+            transform.position = new Vector3(position_x, -2.26f, 1f);
+        }
+    }
+    void OnCollisionEnter2D(Collision2D col)
+    {
 
+        collision = col.gameObject.name;
     }
 }
